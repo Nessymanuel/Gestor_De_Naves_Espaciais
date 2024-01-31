@@ -1,0 +1,9 @@
+Historico de transportes:
+Identificador: 2
+Estado: Pendente
+Origem: PortoEspacial{id=1, nome=1, x=1.0, y=3.0, z=5.0}
+Destino: PortoEspacial{id=1, nome=1, x=1.0, y=3.0, z=5.0}
+Distância:  0.0 ano-luz/hora 
+Custo:  0.0 Z$ 
+Nenhuma Nave Espacial designada
+
