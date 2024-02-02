@@ -5,23 +5,12 @@
 package main;
 
 import entidades.*;
-import static entidades.PortoEspacial.obterPorto;
-import static entidades.Transporte.obterTransporte;
-import enums.Combustivel;
-import enums.EstadoTransporte;
+import enums.*;
 import java.util.*;
-import enums.TipoNave;
-import enums.TipoTransporte;
 import static ficheiros.CarregarDados.*;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import static funcoesAuxiliares.Main.*;
+import static funcoesAuxiliares.PortoEspacial.*;
+import static funcoesAuxiliares.Transporte.obterTransporte;
 
 /**
  *
@@ -61,24 +50,30 @@ public class Funcoesmain implements IListas {
             double z = scanner.nextDouble();
 
             PortoEspacial novoPorto = new PortoEspacial(id, nome, x, y, z);
+
+            //condição para verificar se ja contem uma porto com os mesmos atributos na lista de naves.
+            if (portosEspaciais.contains(novoPorto)) {
+                return null;
+            }
+            novoPorto.equals(portosEspaciais);
             portosEspaciais.add(novoPorto);
 
-            System.out.println("Porto espacial registrado com sucesso.");
+            System.out.println("Porto espacial registrado com sucesso.\n" + novoPorto.toString());
             return novoPorto;
 
         } catch (InputMismatchException e) {
-            System.out.println("Erro: Por favor, insira um valor numérico válido.");
+            System.out.println(" Por favor, insira um valor numérico válido.");
             scanner.nextLine();  // Consumir a entrada inválida
-            return null;  // Ou lançar exceção ou retornar um valor padrão, dependendo do caso
+            return null;
 
         } catch (NoSuchElementException e) {
-            System.out.println("Erro: Entrada esperada não fornecida.");
+            System.out.println(" Entrada esperada não fornecida.");
             scanner.nextLine();  // Consumir a entrada inválida
-            return null;  // Ou lançar exceção ou retornar um valor padrão, dependendo do caso
+            return null;
 
         } catch (IllegalArgumentException e) {
             System.out.println("Erro: " + e.getMessage());
-            return null;  // Ou lançar exceção ou retornar um valor padrão, dependendo do caso
+            return null;
         }
     }
 
@@ -88,11 +83,20 @@ public class Funcoesmain implements IListas {
             System.out.println("Digite o nome da nave espacial:");
             String nome = scanner.nextLine();
 
-            consultarNave();
+            consultarPorto();
             System.out.println("Insira o id do porto espacial de origem:");
-            int id = scanner.nextInt();
             PortoEspacial origem;
+            int id = scanner.nextInt();
             origem = obterPorto(id);
+            if (origem != null) {
+
+                origem = obterPorto(id);
+            } else {
+                // Retorna um novo PortoEspacial padrão se nenhum for encontrado
+                entidades.PortoEspacial portoPadrao = new entidades.PortoEspacial();
+                origem = portoPadrao;
+                System.out.println("\nFoi atribuido o porto padrão.");
+            }
 
             System.out.println("Escolha o tipo da nave espacial:");
             System.out.println("1- Subluz");
@@ -106,9 +110,14 @@ public class Funcoesmain implements IListas {
                     System.out.println("Digite a velocidade da nave espacial em trek");
                     System.out.println("A velocidade maxima da nave Subluz é de 0.3 trek, se colocar uma superior terá a velocidade padrão.");
                     double vs = scanner.nextDouble();
-
                     NaveEspacial ns = new NaveSubluz(Combustivel.nuclear, nome, tipo, origem, vs);
+
+                    //condição para verificar se ja contem uma nave com o mesmo id na lista de naves.
+                    if (navesEspaciais.contains(ns)) {
+                        return null;
+                    }
                     navesEspaciais.add(ns);
+                    System.out.println("Nave espacial registrado com sucesso.\n" + ns.toString());
 
                     return ns;
 
@@ -119,7 +128,12 @@ public class Funcoesmain implements IListas {
                     System.out.println("Digite a velocidade da nave espacial em trek");
                     double vf = scanner.nextDouble();
                     NaveEspacial nf = new NaveFTL(qnt, nome, tipo, origem, vf);
+
+                    if (navesEspaciais.contains(nf)) {
+                        return null;
+                    }
                     navesEspaciais.add(nf);
+                    System.out.println("Nave espacial registrado com sucesso.\n" + nf.toString());
 
                     return nf;
                 default:
@@ -129,12 +143,12 @@ public class Funcoesmain implements IListas {
             }
 
         } catch (InputMismatchException e) {
-            System.out.println("Erro: Por favor, insira um valor numérico válido.");
+            System.out.println(" Por favor, insira um valor numérico válido.");
             scanner.nextLine();  // Consumir a entrada inválida
             return null;  // Ou lançar exceção ou retornar um valor padrão, dependendo do caso
 
         } catch (NoSuchElementException e) {
-            System.out.println("Erro: Entrada esperada não fornecida.");
+            System.out.println(" Entrada esperada não fornecida.");
             scanner.nextLine();  // Consumir a entrada inválida
             return null;  // Ou lançar exceção ou retornar um valor padrão, dependendo do caso
         }
@@ -159,7 +173,7 @@ public class Funcoesmain implements IListas {
             System.out.println(" Insira o tipo de transporte ");
             System.out.println(" 1- Transporte para Materias ");
             System.out.println(" 2- Transporte para Pessoas ");
-            TipoTransporte tipo = null;
+            TipoTransporte tipo;
 
             int op = scanner.nextInt();
             switch (op) {
@@ -168,10 +182,16 @@ public class Funcoesmain implements IListas {
                     System.out.println("Digite a descrição do material");
                     String descricao = scanner.next();
                     System.out.println("Digite a quantidade de carga");
-
                     int qntM = scanner.nextInt();
                     TransporteMaterial tm = new TransporteMaterial(descricao, qntM, id, origem, destino);
+
+                    //condição para verificar se ja contem um  transporte com o mesmo id na lista de transportes.
+                    if (filaTransportes.contains(tm)) {
+                        System.out.println("faz parte da lista de transportes");
+                        break;
+                    }
                     filaTransportes.add(tm);
+                    System.out.println("Nave espacial registrado com sucesso.\n" + tm.toString());
 
                     return tm;
 
@@ -180,7 +200,15 @@ public class Funcoesmain implements IListas {
                     System.out.println("Digite a quantidade de pessoas no transporte");
                     int qntP = scanner.nextInt();
                     TransportePessoa tp = new TransportePessoa(qntP, id, origem, destino);
+
+                    //condição para verificar se ja contem um  transporte com o mesmo id na lista de transportes.
+                    if (filaTransportes.contains(tp)) {
+                        System.out.println("faz parte da lista de transportes");
+                        break;
+                        //return null;
+                    }
                     filaTransportes.add(tp);
+                    System.out.println("Nave espacial registrado com sucesso.\n" + tp.toString());
 
                     return tp;
                 default:
@@ -188,64 +216,51 @@ public class Funcoesmain implements IListas {
                     return null;
             }
         } catch (InputMismatchException e) {
-            System.out.println("Erro: Por favor, insira um valor numérico válido.");
+            System.out.println(" Por favor, insira um valor numérico válido.");
             scanner.nextLine();  // Consumir a entrada inválida
             return null;  // Ou lançar exceção ou retornar um valor padrão, dependendo do caso
 
         } catch (NoSuchElementException e) {
-            System.out.println("Erro: Entrada esperada não fornecida.");
+            System.out.println(" Entrada esperada não fornecida.");
             scanner.nextLine();  // Consumir a entrada inválida
             return null;  // Ou lançar exceção ou retornar um valor padrão, dependendo do caso
         }
+        return null;
+        
 
     }
 
-// Método para consultar todos os transportes
-    public static void consultarTransportes() {
+    //consultar transportes pendentes e historico de transportes pendentes 
+    public static void consultarTransporte(boolean pendente) {
         try {
-            System.out.println("Historico de transportes:");
+            if (pendente) {
+                System.out.println("Fila de Transportes Pendentes:\n");
 
-            for (Transporte transporte : filaTransportes) {
-                System.out.println("Identificador: " + transporte.getId());
-                System.out.println("Estado: " + transporte.getEstado());
-                System.out.println("Origem: " + transporte.getOrigem());
-                System.out.println("Destino: " + transporte.getDestino());
-                System.out.printf("Distância:  " + "%.1f" + " ano-luz/hora \n", transporte.calculaDistancia());
-                System.out.printf("Custo: " + "%.1f" + " Z$ \n", transporte.calculaCusto());
+                for (Transporte transporte : filaTransportes) {
+                    if (transporte.getEstado() == EstadoTransporte.Pendente) {
+                        filaTransportesP.add(transporte);
+                        printTransp(transporte);
+                    }
+                }
+            } else {
+                System.out.println("Historico de transportes:");
 
-                // Verificar se uma nave espacial foi designada
-                NaveEspacial naveDesignada = transporte.getNaveDesignada();
-                if (naveDesignada != null) {
-                    System.out.println("Nave Espacial Designada: " + naveDesignada.getIdnome());
-                } else {
-                    System.out.println("Nenhuma Nave Espacial designada");
+                for (Transporte transporte : filaTransportes) {
+                    printTransp(transporte);
+
+                    // Verificar se uma nave espacial foi designada
+                    NaveEspacial naveDesignada = transporte.getNaveDesignada();
+                    if (naveDesignada != null) {
+                        System.out.println("Nave Espacial Designada: " + naveDesignada.getIdnome());
+                    } else {
+                        System.out.println("Nenhuma Nave Espacial designada");
+                    }
                 }
 
-                System.out.println("\n\n");
             }
-        } catch (Exception e) {
 
-            System.out.println("Erro ao calcular distância ou custo: " + e.getMessage());
-        }
-    }
+            System.out.println("\n\n");
 
-    //consultar transportes pendentes
-    public static void consultarTransportesP() {
-        try {
-            System.out.println("Fila de Transportes Pendentes:\n");
-
-            for (Transporte transporte : filaTransportes) {
-                if (transporte.getEstado() == EstadoTransporte.Pendente) {
-                    filaTransportesP.add(transporte);
-                    System.out.println("Identificador: " + transporte.getId());
-                    System.out.println("Estado: " + transporte.getEstado());
-                    System.out.println("Origem: " + transporte.getOrigem());
-                    System.out.println("Destino: " + transporte.getDestino());
-                    System.out.printf("Distância:  " + "%.1f" + " ano-luz/hora \n", transporte.calculaDistancia());
-                    System.out.printf("Custo: " + "%.1f" + " Z$ \n", transporte.calculaCusto());
-
-                }
-            }
         } catch (Exception e) {
 
             System.out.println("Erro ao calcular distância ou custo: " + e.getMessage());
@@ -266,71 +281,53 @@ public class Funcoesmain implements IListas {
         }
     }
 
+    // Método para alterar o estado de um transporte
     public static void alterarEstadoTransporte(Scanner scanner) {
+        consultarTransporte(false);
         System.out.println("Digite o id do Transporte");
         int id = scanner.nextInt();
+        obterTransporte(id);
+        System.out.println("1-Cancelar \n 2- Finalizar ");
+        int op = scanner.nextInt();
 
-        // Método para alterar o estado de um transporte
-        for (Transporte transporte : filaTransportesP) {
+        for (Transporte transporte : filaTransportes) {
             if (transporte.getId() == id) {
-                if (transporte.getEstado() == EstadoTransporte.Pendente || transporte.getEstado() == EstadoTransporte.Transportando) {
-                    transporte.setEstado(EstadoTransporte.Cancelado);
-                    System.out.println("Estado do transporte alterado para " + EstadoTransporte.Cancelado);
+                if (transporte.getEstado() == EstadoTransporte.Transportando) {
+                    switch (op) {
+                        case 1:
+                            transporte.setEstado(EstadoTransporte.Cancelado);
+                            System.out.println("Estado do transporte alterado para " + EstadoTransporte.Cancelado);
+                            break;
+                        case 2:
+                            transporte.setEstado(EstadoTransporte.Finalizado);
+                            System.out.println("Estado do transporte alterado para " + EstadoTransporte.Finalizado);
+                            break;
+                        default:
+                            System.out.println("Opção invalida");
+                            break;
+                    }
                     System.out.println(transporte.toString());
                 } else {
-                    System.out.println("Erro: Não é possível alterar o estado de um transporte cancelado ou finalizado.");
+                    System.out.println("Não é possível alterar o estado de um transporte que ja esteja no estado cancelado ou finalizado.");
                 }
+            } else {
+                System.out.println("Transporte não encontrado, registre esse transporte.");
             }
         }
-        System.out.println("Erro: Transporte não encontrado, registre esse transporte.");
     }
 
     public static void carregarDadosIniciais(Scanner scanner) {
-        carregarDadosTransporte();
-        carregarDadosTransportesP();
-        carregarNave();
-        carregarPorto();
 
-    }
-
-    public static void consultarTransportesP(FileWriter escreverNoArquivo) {
-        try {
-            // Certifique-se de que o FileWriter foi fornecido
-            if (escreverNoArquivo != null) {
-                escreverNoArquivo.write("Fila de Transportes Pendentes:\n");
-
-                for (Transporte transporte : filaTransportesP) {
-                    escreverNoArquivo.write("Identificador: " + transporte.getId() + "\n");
-                    escreverNoArquivo.write("Estado: " + transporte.getEstado() + "\n");
-                    escreverNoArquivo.write("Origem: " + transporte.getOrigem() + "\n");
-                    escreverNoArquivo.write("Destino: " + transporte.getDestino() + "\n");
-                    escreverNoArquivo.write(String.format("Distância: %.1f ano-luz/hora \n", transporte.calculaDistancia()));
-                    escreverNoArquivo.write(String.format("Custo: %.1f Z$ \n", transporte.calculaCusto()));
-                    escreverNoArquivo.write("\n");
-                }
-
-                escreverNoArquivo.write("\n"); // Adiciona uma linha em branco para separar as consultas
-
-                System.out.println("Consultas foram escritas no arquivo com sucesso.");
-            } else {
-                System.out.println("FileWriter não fornecido. Não é possível escrever no arquivo.");
-            }
-        } catch (IOException e) {
-            System.out.println("Erro ao escrever no arquivo: " + e.getMessage());
-        }
-    }
-
-    private static <T> List<T> lerLista(ObjectInputStream inputStream) throws IOException, ClassNotFoundException {
-        return (List<T>) inputStream.readObject();
     }
 
     public static void designarNave(Scanner scanner) {
+
+        //consultarTransportesP();
+        consultarTransporte(true);
         System.out.println("\t Digite o id do transporte");
-        consultarTransportesP();
         int id = scanner.nextInt();
         if (obterTransporte(id) != null) {
             Transporte transporte = obterTransporte(id);
-
             for (NaveEspacial naves : navesEspaciais) {
                 if (!naves.temTransporte(transporte)) {
                     if (naves instanceof NaveFTL) {
@@ -341,6 +338,7 @@ public class Funcoesmain implements IListas {
                                 transporte.setNaveDesignada(naves);
                                 naves.setTransporte(transporte);
                                 transporte.setEstado(EstadoTransporte.Transportando);
+                                filaTransportesP.remove(transporte);
                                 return;
                             }
                         } else if (transporte instanceof TransportePessoa) {
@@ -348,6 +346,7 @@ public class Funcoesmain implements IListas {
                                 transporte.setNaveDesignada(naves);
                                 naves.setTransporte(transporte);
                                 transporte.setEstado(EstadoTransporte.Transportando);
+                                filaTransportesP.remove(transporte);
 
                                 return;
                             }
@@ -367,18 +366,21 @@ public class Funcoesmain implements IListas {
                         }
                     }
 
-                } // transporte.setEstado(EstadoTransporte.Transportando);
-                else {
+                } else {
                     System.out.println("A nave ja foi designada.");
                     return;
                 }
             }
             System.out.println("Naves indisponiveis");
-            filaTransportesP.offer(transporte);
+            // filaTransportesP.add(transporte);
         }
     }
 
     public static void sair() {
+        escreverDadosTransporte();
+        escreverDadosTransportesP();
+        escreverNave();
+        escreverPorto();
         System.out.println("Encerrando o sistema...");
         System.exit(0);
     }

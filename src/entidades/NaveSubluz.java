@@ -49,7 +49,7 @@ public class NaveSubluz extends NaveEspacial {
     // Sobrescreve o método toString para fornecer uma representação textual específica de NaveSubluz
     @Override
     public String toString() {
-        return "NaveSubluz{" + "velocidadeM=" + velocidadeM + ", combustivel=" + combustivel + '}';
+        return "NaveSubluz{" + "nome='" + idnome + '\'' + ", tipo=" + tipo + ", transporte=" + (transporte != null ? transporte.toString() : "Nenhum transporte atribuído") + '}' + "velocidadeM=" + velocidadeM + ", combustivel=" + combustivel + '}';
     }
 
 }

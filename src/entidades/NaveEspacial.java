@@ -13,10 +13,10 @@ import enums.TipoNave;
 public class NaveEspacial implements IListas {
 
     // Atributos da classe
-    private String idnome;
-    private TipoNave tipo;
-    private PortoEspacial portoAtual;
-    private Transporte transporte;
+    protected String idnome;
+    protected TipoNave tipo;
+    protected PortoEspacial portoAtual;
+    protected Transporte transporte;
 
     // Construtor da classe
     public NaveEspacial(String idnome, TipoNave tipo, PortoEspacial portoAtual) {
@@ -69,11 +69,27 @@ public class NaveEspacial implements IListas {
             return true;
         }
     }
+    
+    
+         // Sobrescreve o método equals para verificar se dois portos são iguais
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof NaveEspacial) {
+            NaveEspacial naveEspacial = (NaveEspacial) obj;
+            // Compara os atributos para determinar se os transportes são iguais
+            if (this.idnome.equals(naveEspacial.idnome)  ) {
+                System.out.println("A nave espacial não pode ter o mesmo id nome, crie outro");
+                return true;
+            } 
+        } 
+            return false;
+        
+    }
 
     // Método toString para representação textual da instância
     @Override
     public String toString() {
-        return "NaveEspacial{" + "nome='" + idnome + '\'' + ", tipo=" + tipo + ", transporte=" + (transporte != null ? transporte.toString() : "Nenhum transporte atribuído") + '}';
+        return "NaveEspacial{" + "nome='" + idnome + '\'' + ", tipo=" + tipo + ", transporte=" + (transporte != null ? transporte.toString() : "Nenhum transporte atribuído") + '}'+'\n';
     }
 
 }

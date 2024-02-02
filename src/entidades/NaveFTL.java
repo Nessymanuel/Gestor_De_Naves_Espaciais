@@ -43,7 +43,7 @@ public class NaveFTL extends NaveEspacial {
     // Sobrescreve o método toString para fornecer uma representação textual específica de NaveFTL
     @Override
     public String toString() {
-        return  "NaveFTL{" +  "velocidadeM=" + velocidadeM + ", limiteTransporte=" + limiteTransporte + '}';
+        return  "NaveFTL{" +"nome='" + idnome + '\'' + ", tipo=" + tipo + ", transporte=" + (transporte != null ? transporte.toString() : "Nenhum transporte atribuído") + '}'+ "velocidadeM=" + velocidadeM + ", limiteTransporte=" + limiteTransporte + '}';
     }
     
 

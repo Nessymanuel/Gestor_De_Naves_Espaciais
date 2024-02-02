@@ -11,8 +11,8 @@ package entidades;
 public class PortoEspacial implements IListas {
 
     // Atributos da classe
-    int id;
-    String nome;
+    private int id;
+    private String nome;
     private double x;
     private double y;
     private double z;
@@ -76,28 +76,31 @@ public class PortoEspacial implements IListas {
         this.z = z;
     }
 
-    // Método estático para obter um PortoEspacial por ID
-    public static PortoEspacial obterPorto(int id) {
-        for (PortoEspacial porto : portosEspaciais) {
-            if (porto.getId() == id) {
-                return porto;
-            } else {
-                // Mensagem de aviso caso o porto não seja encontrado
-                System.out.println("Porto espacial não encontrado. Foi adicionado o porto espacial padrão.");
-                break; // Encerra o loop após a primeira iteração
+       // Sobrescreve o método equals para verificar se dois portos são iguais
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof PortoEspacial) {
+            PortoEspacial portoEspacial = (PortoEspacial) obj;
+            // Compara os atributos para determinar se os transportes são iguais
+            if (this.id == portoEspacial.id && this.nome.equals(portoEspacial.nome) && this.x == portoEspacial.x && this.y == portoEspacial.y && this.z == portoEspacial.z ) {
+                System.out.println("O porto espacial ja existe na lista de portos, crie outro");
+                return true;
+            } else if( this.id == portoEspacial.id){
+                System.out.println("Não pode criar um porto espacial com o mesmo id");
+                return true;
+            }else if( this.x == portoEspacial.x && this.y == portoEspacial.y && this.z == portoEspacial.z){
+                System.out.println("Não pode criar um porto espacial com cordenadas iguais");
+                return true;
             }
-        }
-        // Retorna um novo PortoEspacial padrão se nenhum for encontrado
-        PortoEspacial portoPadrao = new PortoEspacial();
-        return portoPadrao;
+        } 
+            return false;
+        
     }
 
     // Sobrescreve o método toString para fornecer uma representação textual da instância
     @Override
     public String toString() {
-        return "PortoEspacial{" + "id=" + id + ", nome=" + nome + ", x=" + x + ", y=" + y + ", z=" + z + '}';
+        return "PortoEspacial{" + "id=" + id + ", nome=" + nome + ", x=" + x + ", y=" + y + ", z=" + z + '}'+'\n';
     }
 
 }
-
-

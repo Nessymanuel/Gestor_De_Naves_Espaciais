@@ -68,29 +68,12 @@ public abstract class Transporte implements IListas {
         this.estado = estado;
     }
 
-    // Método estático para obter um Transporte por ID
-    public static Transporte obterTransporte(int id) {
-        for (Transporte transporte : filaTransportesP) {
-            if (transporte.getId() == id) {
-                return transporte;
-            } else {
-                // Mensagem de aviso caso o transporte não seja encontrado
-                System.out.println("Transporte não encontrado. Registre esse transporte.");
-            }
-        }
-        return null;
-    }
-
     // Funções abstratas, conforme indicado no enunciado
     public abstract double calculaDistancia();
 
     public abstract double calculaCusto();
 
-    // Sobrescreve o método toString para fornecer uma representação textual da instância
-    @Override
-    public String toString() {
-        return "Transporte{" + "id=" + id + ", origem=" + origem.toString() + ", destino=" + destino + ", estado=" + estado + '}';
-    }
+   
 
     // Sobrescreve o método equals para verificar se dois transportes são iguais
     @Override
@@ -98,17 +81,12 @@ public abstract class Transporte implements IListas {
         if (obj instanceof Transporte) {
             Transporte transporte = (Transporte) obj;
             // Compara os atributos para determinar se os transportes são iguais
-            if (this.id == transporte.id && this.destino == transporte.destino && this.origem == transporte.origem) {
+            if (this.id == transporte.id) {
                 System.out.println("Os transportes são iguais");
                 return true;
-            } else {
-                System.out.println("ERRO!! \n Os transportes não são iguais");
-                return false;
             }
-        } else {
-            System.out.println("Não é uma instância de transporte ");
-            return false;
         }
+        return false;
     }
 
 }

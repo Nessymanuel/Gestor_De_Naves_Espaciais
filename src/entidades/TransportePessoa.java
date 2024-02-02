@@ -32,16 +32,21 @@ public class TransportePessoa extends Transporte {
     @Override
     public double calculaCusto() {
         double distancia;
-        
+
         // Calcula a distância entre origem e destino usando o método da superclasse
         distancia = this.calculaDistancia();
-        
+
         // Lógica para calcular o custo baseado na distância e na quantidade de pessoas
         if (distancia < 0.5) {
             return distancia * 1000000 * this.qntPessoas * 100;
         } else {
             return distancia * 100 * this.qntPessoas * 100;
         }
+    }
+
+    @Override
+    public String toString() {
+        return "TransportePessoa{" + "id=" + id + ", origem=" + origem.toString() + ", destino=" + destino + ", estado=" + estado  + "qntPessoas=" + qntPessoas + '}'+"\n";
     }
 
     // Sobrescreve o método calculaDistancia para fornecer uma lógica específica para TransportePessoa

@@ -12,8 +12,6 @@ import static main.Funcoesmain.*;
  *
  * @author Eugenio Domingos
  */
-
-
 public class Menu {
 
     public static void menu() {
@@ -21,7 +19,7 @@ public class Menu {
             int opcao = 0;
             do {
                 exibirMenu();
-                
+
                 try {
                     opcao = scanner.nextInt();
                     scanner.nextLine();  // Consumir a quebra de linha após o número
@@ -30,7 +28,7 @@ public class Menu {
                     scanner.nextLine();  // Consumir a entrada inválida
                     continue;  // Reiniciar o loop
                 }
-                
+
                 try {
                     switch (opcao) {
                         case 1:
@@ -43,7 +41,19 @@ public class Menu {
                             registrarTransporte(scanner);
                             break;
                         case 4:
-                            consultarTransportes();
+                            System.out.println("Digite 1 para transportes pendentes \n Digite 2 para Historico de transportes");
+                            int transporte = scanner.nextInt();
+                            boolean valor;
+
+                            if (transporte == 1) {
+                                valor = true;
+                            } else if (transporte == 2) {
+                                valor = false;
+                            } else {
+                                System.out.println("Por favor, insira um número inteiro válido.");
+                                continue;  // Reiniciar o loop
+                            }
+                            consultarTransporte(valor);
                             break;
                         case 5:
                             consultarPorto();
@@ -66,7 +76,7 @@ public class Menu {
                         default:
                             System.out.println("Opção inválida. Tente novamente.");
                     }
-                    
+
                 } catch (Error e) {
                     System.out.println("Erro: " + e.getMessage());
                 }

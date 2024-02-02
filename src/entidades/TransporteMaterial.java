@@ -55,6 +55,13 @@ public class TransporteMaterial extends Transporte {
         }
     }
 
+    @Override
+    public String toString() {
+        return "TransporteMaterial{" + "id=" + id + ", origem=" + origem.toString() + ", destino=" + destino + ", estado=" + estado + "descricao=" + descricao + ", carga=" + carga + '}'+'\n';
+    }
+    
+    
+
     // Sobrescreve o método calculaDistancia para fornecer uma lógica específica para TransporteMaterial
     @Override
     public double calculaDistancia() {

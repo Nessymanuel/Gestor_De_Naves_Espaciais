@@ -25,7 +25,7 @@ import main.Funcoesmain;
  */
 public class CarregarDados {
 
-    public static void carregarDadosTransporte() {
+    public static void escreverDadosTransporte() {
 
         try {
 
@@ -63,7 +63,7 @@ public class CarregarDados {
     }
 
     //consultar transportes pendentes
-    public static void carregarDadosTransportesP() {
+    public static void escreverDadosTransportesP() {
         try {
 
             File arquivo = new File("Arquivo_Transportes_P.txt");
@@ -98,12 +98,12 @@ public class CarregarDados {
         } catch (IOException e) {
             Logger.getLogger(Funcoesmain.class.getName()).log(Level.SEVERE, null, e);
 
-            System.out.println("Erro ao calcular distância ou custo: " + e.getMessage());
+            System.out.println( e.getMessage());
         }
 
     }
 
-    public static void carregarPorto() {
+    public static void escreverPorto() {
         try {
 
             File arquivo = new File("Arquivo_Porto.txt");
@@ -114,6 +114,7 @@ public class CarregarDados {
             for (PortoEspacial portoEspacial : portosEspaciais) {
                 escrever.write(portoEspacial.toString());
             }
+            escrever.close();
         } catch (IOException e) {
             Logger.getLogger(Funcoesmain.class.getName()).log(Level.SEVERE, null, e);
 
@@ -121,7 +122,7 @@ public class CarregarDados {
         }
     }
 
-    public static void carregarNave() {
+    public static void escreverNave() {
         try {
 
             File arquivo = new File("Arquivo_Nave.txt");
@@ -132,6 +133,7 @@ public class CarregarDados {
             for (NaveEspacial naveEspacial : navesEspaciais) {
                 escrever.write(naveEspacial.toString());
             }
+            escrever.close();
         } catch (IOException e) {
             Logger.getLogger(Funcoesmain.class.getName()).log(Level.SEVERE, null, e);
 
