@@ -7,8 +7,8 @@ package main;
 import entidades.*;
 import enums.*;
 import java.util.*;
-import static ficheiros.CarregarDados.*;
-import static funcoesAuxiliares.Main.*;
+import static ficheiros.GuardarDados.*;
+import static funcoesAuxiliares.Apresentar.*;
 import static funcoesAuxiliares.PortoEspacial.*;
 import static funcoesAuxiliares.Transporte.obterTransporte;
 
@@ -27,8 +27,9 @@ public class Funcoesmain implements IListas {
         System.out.println("5. Consultar todos os portos espaciais disponiveis");
         System.out.println("6. Consultar todos as naves espaciais");
         System.out.println("7. Alterar estado de um transporte");
-        System.out.println("8. Carregar dados iniciais");
-        System.out.println("9. Designar transportes");
+        System.out.println("8. Designar transportes");
+        System.out.println("9. Carregar dados iniciais");
+        System.out.println("10.Guardar dados no ficheiro");
         System.out.println("0. Sair");
         System.out.print("Escolha uma opção: ");
     }
@@ -101,7 +102,7 @@ public class Funcoesmain implements IListas {
             System.out.println("Escolha o tipo da nave espacial:");
             System.out.println("1- Subluz");
             System.out.println("2- FTL");
-            TipoNave tipo = null;
+            TipoNave tipo;
 
             int op = scanner.nextInt();
             switch (op) {
@@ -117,7 +118,9 @@ public class Funcoesmain implements IListas {
                         return null;
                     }
                     navesEspaciais.add(ns);
-                    System.out.println("Nave espacial registrado com sucesso.\n" + ns.toString());
+                    navesEspaciaisD.add(ns);
+
+                    System.out.println("Nave espacial registrada com sucesso.\n" + ns.toString());
 
                     return ns;
 
@@ -133,7 +136,8 @@ public class Funcoesmain implements IListas {
                         return null;
                     }
                     navesEspaciais.add(nf);
-                    System.out.println("Nave espacial registrado com sucesso.\n" + nf.toString());
+                    navesEspaciaisD.add(nf);
+                    System.out.println("Nave espacial registrada com sucesso.\n" + nf.toString());
 
                     return nf;
                 default:
@@ -152,23 +156,49 @@ public class Funcoesmain implements IListas {
             scanner.nextLine();  // Consumir a entrada inválida
             return null;  // Ou lançar exceção ou retornar um valor padrão, dependendo do caso
         }
+
     }
 
     public static Transporte registrarTransporte(Scanner scanner) {
         try {
-            System.out.println("Digite o id do transporte:");
-            int id = scanner.nextInt();
+            int id;
+            Transporte idT;
 
-            System.out.println("\tPortos Espaciais Disponíveis:");
-            consultarPorto();
+            //Verificar se o id do transporte existe 
+            do {
+                System.out.println("Digite o id do transporte:");
+                id = scanner.nextInt();
 
-            System.out.println("Insira o id do porto espacial de origem:");
-            int idOrigem = scanner.nextInt();
-            PortoEspacial origem = obterPorto(idOrigem);
+                idT = obterTransporte(id);
+            } while (idT != null);
 
-            System.out.println("Insira o id do porto espacial de destino:");
-            int idDestino = scanner.nextInt();
-            PortoEspacial destino = obterPorto(idDestino);
+            int idOrigem;
+            PortoEspacial origem;
+
+            //Verificar se o id do porto existe 
+            do {
+                consultarPorto();
+
+                System.out.println("Insira o id do porto espacial de origem:");
+                idOrigem = scanner.nextInt();
+
+                origem = obterPorto(idOrigem);
+            } while (origem == null);
+
+            int idDestino;
+            PortoEspacial destino;
+
+            //Verificar se o id do porto existe e se o porto espacial de destino e o mesmo que o do origem.
+            do {
+                consultarPorto();
+
+                System.out.println("Insira o id do porto espacial de destino:");
+                idDestino = scanner.nextInt();
+                destino = obterPorto(idDestino);
+                if (destino.equals(origem)) {
+                    System.out.println("O porto espacial de origem não pode ser o mesmo que o porto espacial de destino, insira outro.");
+                }
+            } while (destino == null || destino.equals(origem));
 
             System.out.println(" Insira o tipo de transporte ");
             System.out.println(" 1- Transporte para Materias ");
@@ -191,7 +221,7 @@ public class Funcoesmain implements IListas {
                         break;
                     }
                     filaTransportes.add(tm);
-                    System.out.println("Nave espacial registrado com sucesso.\n" + tm.toString());
+                    System.out.println("Transporte registrado com sucesso.\n" + tm.toString());
 
                     return tm;
 
@@ -226,7 +256,6 @@ public class Funcoesmain implements IListas {
             return null;  // Ou lançar exceção ou retornar um valor padrão, dependendo do caso
         }
         return null;
-        
 
     }
 
@@ -234,8 +263,11 @@ public class Funcoesmain implements IListas {
     public static void consultarTransporte(boolean pendente) {
         try {
             if (pendente) {
-                System.out.println("Fila de Transportes Pendentes:\n");
+                System.out.println("\tFila de Transportes Pendentes:\n");
 
+                if (filaTransportesP.isEmpty()) {
+                    System.out.println("A fila escontra-se vazia");
+                }
                 for (Transporte transporte : filaTransportes) {
                     if (transporte.getEstado() == EstadoTransporte.Pendente) {
                         filaTransportesP.add(transporte);
@@ -243,7 +275,11 @@ public class Funcoesmain implements IListas {
                     }
                 }
             } else {
-                System.out.println("Historico de transportes:");
+                System.out.println("\tHistorico de transportes\n");
+
+                if (filaTransportes.isEmpty()) {
+                    System.out.println("A fila escontra-se vazia");
+                }
 
                 for (Transporte transporte : filaTransportes) {
                     printTransp(transporte);
@@ -268,39 +304,79 @@ public class Funcoesmain implements IListas {
     }
 
     public static void consultarPorto() {
-        System.out.println("Portos espaciais disponiveis");
+        System.out.println(" \tPortos espaciais disponiveis\n");
+
+        if (portosEspaciais.isEmpty()) {
+            System.out.println("A lista escontra-se vazia");
+        }
+
         for (PortoEspacial portoEspacial : portosEspaciais) {
             System.out.println(portoEspacial.toString());
         }
     }
 
-    public static void consultarNave() {
-        System.out.println("Naves espaciais disponiveis");
-        for (NaveEspacial naveEspacial : navesEspaciais) {
-            System.out.println(naveEspacial.toString());
+    public static void consultarNave(boolean disponivel) {
+
+        if (disponivel) {
+            System.out.println("\tLista de Naves Disponiveis:\n");
+
+            if (navesEspaciaisD.isEmpty()) {
+                System.out.println("A lista escontra-se vazia");
+            }
+
+            for (NaveEspacial naveEspacial : navesEspaciaisD) {
+                System.out.println(naveEspacial.toString());
+            }
+        } else {
+
+            System.out.println("\tHistorico de Naves\n");
+
+            if (navesEspaciais.isEmpty()) {
+                System.out.println("A lista escontra-se vazia");
+            }
+
+            for (NaveEspacial naveEspacial : navesEspaciais) {
+                System.out.println(naveEspacial.toString());
+
+            }
+
         }
     }
 
     // Método para alterar o estado de um transporte
     public static void alterarEstadoTransporte(Scanner scanner) {
+
         consultarTransporte(false);
-        System.out.println("Digite o id do Transporte");
-        int id = scanner.nextInt();
-        obterTransporte(id);
+        Transporte idT;
+        int id;
+
+        //Verificar se o id do transporte existe 
+        do {
+            System.out.println("Digite o id do transporte:");
+            id = scanner.nextInt();
+
+            idT = obterTransporte(id);
+        } while (idT == null);
+
         System.out.println("1-Cancelar \n 2- Finalizar ");
         int op = scanner.nextInt();
 
         for (Transporte transporte : filaTransportes) {
             if (transporte.getId() == id) {
-                if (transporte.getEstado() == EstadoTransporte.Transportando) {
+                if (transporte.getEstado() == EstadoTransporte.Pendente || transporte.getEstado() == EstadoTransporte.Transportando) {
                     switch (op) {
                         case 1:
                             transporte.setEstado(EstadoTransporte.Cancelado);
                             System.out.println("Estado do transporte alterado para " + EstadoTransporte.Cancelado);
                             break;
                         case 2:
-                            transporte.setEstado(EstadoTransporte.Finalizado);
-                            System.out.println("Estado do transporte alterado para " + EstadoTransporte.Finalizado);
+                            if (transporte.getEstado() == EstadoTransporte.Transportando) {
+                                transporte.setEstado(EstadoTransporte.Finalizado);
+                                System.out.println("Estado do transporte alterado para " + EstadoTransporte.Finalizado);
+
+                            } else {
+                                System.out.println("Não pode finalizar um transporte Pendente ou a Finalizado");
+                            }
                             break;
                         default:
                             System.out.println("Opção invalida");
@@ -310,8 +386,6 @@ public class Funcoesmain implements IListas {
                 } else {
                     System.out.println("Não é possível alterar o estado de um transporte que ja esteja no estado cancelado ou finalizado.");
                 }
-            } else {
-                System.out.println("Transporte não encontrado, registre esse transporte.");
             }
         }
     }
@@ -324,63 +398,74 @@ public class Funcoesmain implements IListas {
 
         //consultarTransportesP();
         consultarTransporte(true);
-        System.out.println("\t Digite o id do transporte");
-        int id = scanner.nextInt();
-        if (obterTransporte(id) != null) {
-            Transporte transporte = obterTransporte(id);
-            for (NaveEspacial naves : navesEspaciais) {
-                if (!naves.temTransporte(transporte)) {
-                    if (naves instanceof NaveFTL) {
-                        NaveFTL naveF = (NaveFTL) naves;
-                        if (transporte instanceof TransporteMaterial) {
 
-                            if (naveF.getLimiteTransporte() >= ((TransporteMaterial) transporte).getCarga()) {
-                                transporte.setNaveDesignada(naves);
-                                naves.setTransporte(transporte);
-                                transporte.setEstado(EstadoTransporte.Transportando);
-                                filaTransportesP.remove(transporte);
-                                return;
-                            }
-                        } else if (transporte instanceof TransportePessoa) {
-                            if (naveF.getLimiteTransporte() >= ((TransportePessoa) transporte).getQntPessoas()) {
-                                transporte.setNaveDesignada(naves);
-                                naves.setTransporte(transporte);
-                                transporte.setEstado(EstadoTransporte.Transportando);
-                                filaTransportesP.remove(transporte);
+        int id;
+        Transporte idT;
 
-                                return;
-                            }
-                        }
-                    } else {
-                        if (naves instanceof NaveSubluz) {
-                            NaveSubluz naveS = (NaveSubluz) naves;
-                            if (transporte instanceof TransporteMaterial || transporte instanceof TransportePessoa) {
-                                transporte.setNaveDesignada(naveS);
-                                naves.setTransporte(transporte);
-                                transporte.setEstado(EstadoTransporte.Transportando);
-                                filaTransportesP.remove(transporte);
+        //Verificar se o id do transporte existe 
+        do {
+            System.out.println("Digite o id do transporte:");
+            id = scanner.nextInt();
+            idT = obterTransporte(id);
+        } while (idT == null);
 
-                                return;
+        Transporte transporte = obterTransporte(id);
+        for (NaveEspacial naves : navesEspaciaisD) {
+            if (naves instanceof NaveFTL) {
+                NaveFTL naveF = (NaveFTL) naves;
+                if (transporte instanceof TransporteMaterial) {
 
-                            }
-                        }
+                    if (naveF.getLimiteTransporte() >= ((TransporteMaterial) transporte).getCarga() && transporte.getOrigem() == naveF.getPortoAtual()) {
+                        transporte.setNaveDesignada(naves);
+                        naves.setTransporte(transporte);
+                        transporte.setEstado(EstadoTransporte.Transportando);
+                        filaTransportesP.remove(transporte);
+                        navesEspaciaisD.remove(naveF);
+                        return;
                     }
+                } else if (transporte instanceof TransportePessoa) {
+                    if (naveF.getLimiteTransporte() >= ((TransportePessoa) transporte).getQntPessoas() && transporte.getOrigem() == naveF.getPortoAtual()) {
+                        transporte.setNaveDesignada(naves);
+                        naves.setTransporte(transporte);
 
-                } else {
-                    System.out.println("A nave ja foi designada.");
-                    return;
+                        transporte.setEstado(EstadoTransporte.Transportando);
+                        filaTransportesP.remove(transporte);
+                        navesEspaciaisD.remove(naveF);
+
+                        return;
+                    }
+                }
+            } else {
+                if (naves instanceof NaveSubluz) {
+                    NaveSubluz naveS = (NaveSubluz) naves;
+                    if ((transporte instanceof TransporteMaterial || transporte instanceof TransportePessoa) && transporte.getOrigem() == naveS.getPortoAtual()) {
+                        transporte.setNaveDesignada(naveS);
+                        naves.setTransporte(transporte);
+                        transporte.setEstado(EstadoTransporte.Transportando);
+                        filaTransportesP.remove(transporte);
+                        navesEspaciaisD.remove(naveS);
+
+                        return;
+
+                    }
                 }
             }
-            System.out.println("Naves indisponiveis");
-            // filaTransportesP.add(transporte);
+
         }
+        System.out.println("Naves indisponiveis");
+        // filaTransportesP.add(transporte);
+
     }
 
-    public static void sair() {
+    public static void guardarF() {
         escreverDadosTransporte();
         escreverDadosTransportesP();
         escreverNave();
         escreverPorto();
+    }
+
+    public static void sair() {
+
         System.out.println("Encerrando o sistema...");
         System.exit(0);
     }

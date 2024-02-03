@@ -27,6 +27,8 @@ public abstract class Transporte implements IListas {
         this.estado = EstadoTransporte.Pendente;
     }
 
+
+
     // Getters e setters para os atributos
     public int getId() {
         return id;
@@ -73,8 +75,6 @@ public abstract class Transporte implements IListas {
 
     public abstract double calculaCusto();
 
-   
-
     // Sobrescreve o método equals para verificar se dois transportes são iguais
     @Override
     public boolean equals(Object obj) {
@@ -82,7 +82,7 @@ public abstract class Transporte implements IListas {
             Transporte transporte = (Transporte) obj;
             // Compara os atributos para determinar se os transportes são iguais
             if (this.id == transporte.id) {
-                System.out.println("Os transportes são iguais");
+                System.out.println("Esse id ja existe na lista de transportes, crie outro ");
                 return true;
             }
         }

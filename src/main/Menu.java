@@ -45,30 +45,54 @@ public class Menu {
                             int transporte = scanner.nextInt();
                             boolean valor;
 
-                            if (transporte == 1) {
-                                valor = true;
-                            } else if (transporte == 2) {
-                                valor = false;
-                            } else {
-                                System.out.println("Por favor, insira um número inteiro válido.");
-                                continue;  // Reiniciar o loop
+                            switch (transporte) {
+                                case 1:
+                                    valor = true;
+                                    break;
+                                case 2:
+                                    valor = false;
+                                    break;
+                                default:
+                                    System.out.println("Por favor, insira um número inteiro válido.");
+                                    continue;  // Reiniciar o loop
                             }
                             consultarTransporte(valor);
                             break;
+
                         case 5:
                             consultarPorto();
                             break;
                         case 6:
-                            consultarNave();
+                            System.out.println("Digite 1 para naves disponiveis \n Digite 2 para Historico de naves");
+                            int nave = scanner.nextInt();
+                            boolean valor1;
+
+                            switch (nave) {
+                                case 1:
+                                    valor1 = true;
+                                    break;
+                                case 2:
+                                    valor1 = false;
+                                    break;
+                                default:
+                                    System.out.println("Por favor, insira um número inteiro válido.");
+                                    continue;  // Reiniciar o loop
+                            }
+                            consultarNave(valor1);
                             break;
+
                         case 7:
                             alterarEstadoTransporte(scanner);
                             break;
                         case 8:
-                            carregarDadosIniciais(scanner);
+                            designarNave(scanner);
                             break;
                         case 9:
-                            designarNave(scanner);
+                            carregarDadosIniciais(scanner);
+
+                            break;
+                        case 10:
+                            guardarF();
                             break;
                         case 0:
                             sair();

@@ -57,7 +57,7 @@ public class TransporteMaterial extends Transporte {
 
     @Override
     public String toString() {
-        return "TransporteMaterial{" + "id=" + id + ", origem=" + origem.toString() + ", destino=" + destino + ", estado=" + estado + "descricao=" + descricao + ", carga=" + carga + '}'+'\n';
+        return "TransporteMaterial: " + "id=" + id + ", porto espacial de origem = " + origem + " , porto espacial de destino = " + destino + " , estado = " + estado + ", descricao = " + descricao + ", carga = " + carga +"toneladas\n";
     }
     
     

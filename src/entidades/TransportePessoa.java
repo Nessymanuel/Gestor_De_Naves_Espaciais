@@ -46,7 +46,7 @@ public class TransportePessoa extends Transporte {
 
     @Override
     public String toString() {
-        return "TransportePessoa{" + "id=" + id + ", origem=" + origem.toString() + ", destino=" + destino + ", estado=" + estado  + "qntPessoas=" + qntPessoas + '}'+"\n";
+        return "TransportePessoa: " + "id=" + id + ", origem=" + origem.toString() + ", destino=" + destino + ", estado=" + estado  + "qntPessoas=" + qntPessoas+"\n";
     }
 
     // Sobrescreve o método calculaDistancia para fornecer uma lógica específica para TransportePessoa

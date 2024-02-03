@@ -27,6 +27,9 @@ public static List<PortoEspacial> portosEspaciais = new ArrayList<>();
 // Lista de naves espaciais para armazenar instâncias de NaveEspacial
 public static List<NaveEspacial> navesEspaciais = new ArrayList<>();
 
+// Lista de naves espaciais para armazenar instâncias de NaveEspacial disponiveis
+public static List<NaveEspacial> navesEspaciaisD = new ArrayList<>();
+
 
   
 

@@ -12,9 +12,12 @@ import entidades.NaveEspacial;
 import entidades.PortoEspacial;
 import entidades.Transporte;
 import enums.EstadoTransporte;
+import static funcoesAuxiliares.Apresentar.printTransF;
+import static funcoesAuxiliares.NomeValido.nomeValido;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import main.Funcoesmain;
@@ -23,13 +26,15 @@ import main.Funcoesmain;
  *
  * @author Eugenio Domingos
  */
-public class CarregarDados {
+public class GuardarDados {
 
     public static void escreverDadosTransporte() {
 
         try {
+            Scanner scanner = new Scanner(System.in);
 
-            File arquivo = new File("Arquivo_Transportes.txt");
+            System.out.println("Digite o nome do ficheiro que pretende guardar a lista de transportes");
+            File arquivo = nomeValido(scanner);
 
             arquivo.createNewFile();
             FileWriter escrever = new FileWriter(arquivo);
@@ -37,13 +42,7 @@ public class CarregarDados {
             escrever.write("Historico de transportes:");
 
             for (Transporte transporte : filaTransportes) {
-                escrever.write("\n");
-                escrever.write("Identificador: " + transporte.getId() + "\n");
-                escrever.write("Estado: " + transporte.getEstado() + "\n");
-                escrever.write("Origem: " + transporte.getOrigem() + "\n");
-                escrever.write("Destino: " + transporte.getDestino() + "\n");
-                escrever.write("Distância:  " + transporte.calculaDistancia() + " ano-luz/hora \n");
-                escrever.write("Custo:  " + transporte.calculaCusto() + " Z$ \n");
+                printTransF(transporte);
 
                 // Verificar se uma nave espacial foi designada
                 NaveEspacial naveDesignada = transporte.getNaveDesignada();
@@ -65,8 +64,10 @@ public class CarregarDados {
     //consultar transportes pendentes
     public static void escreverDadosTransportesP() {
         try {
+            Scanner scanner = new Scanner(System.in);
+            System.out.println("Digite o nome do ficheiro que pretende guardar a lista de transportes");
 
-            File arquivo = new File("Arquivo_Transportes_P.txt");
+            File arquivo = nomeValido(scanner);
 
             arquivo.createNewFile();
             FileWriter escrever = new FileWriter(arquivo);
@@ -77,12 +78,7 @@ public class CarregarDados {
                 if (transporte.getEstado() == EstadoTransporte.Pendente) {
                     filaTransportesP.add(transporte);
                     escrever.write("\n");
-                    escrever.write("Identificador: " + transporte.getId() + "\n");
-                    escrever.write("Estado: " + transporte.getEstado() + "\n");
-                    escrever.write("Origem: " + transporte.getOrigem() + "\n");
-                    escrever.write("Destino: " + transporte.getDestino() + "\n");
-                    escrever.write("Distância:  " + transporte.calculaDistancia() + " ano-luz/hora \n");
-                    escrever.write("Custo:  " + transporte.calculaCusto() + " Z$ \n");
+                    printTransF(transporte);
 
                     // Verificar se uma nave espacial foi designada
                     NaveEspacial naveDesignada = transporte.getNaveDesignada();
@@ -98,15 +94,17 @@ public class CarregarDados {
         } catch (IOException e) {
             Logger.getLogger(Funcoesmain.class.getName()).log(Level.SEVERE, null, e);
 
-            System.out.println( e.getMessage());
+            System.out.println(e.getMessage());
         }
 
     }
 
     public static void escreverPorto() {
         try {
+            Scanner scanner = new Scanner(System.in);
+            System.out.println("Digite o nome do ficheiro que pretende guardar a lista de portos");
 
-            File arquivo = new File("Arquivo_Porto.txt");
+            File arquivo = nomeValido(scanner);
 
             arquivo.createNewFile();
             FileWriter escrever = new FileWriter(arquivo);
@@ -124,8 +122,10 @@ public class CarregarDados {
 
     public static void escreverNave() {
         try {
+            Scanner scanner = new Scanner(System.in);
+            System.out.println("Digite o nome do ficheiro que pretende guardar a lista de naves");
 
-            File arquivo = new File("Arquivo_Nave.txt");
+            File arquivo = nomeValido(scanner);
 
             arquivo.createNewFile();
             FileWriter escrever = new FileWriter(arquivo);

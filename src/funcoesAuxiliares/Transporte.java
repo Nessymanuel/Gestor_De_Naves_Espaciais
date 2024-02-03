@@ -20,7 +20,6 @@ public class Transporte {
             }
         }
         // Mensagem de aviso caso o transporte não seja encontrado
-        System.out.println("Transporte não encontrado. Registre esse transporte.");
         return null;
     }
 }

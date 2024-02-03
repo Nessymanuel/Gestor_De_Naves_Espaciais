@@ -62,13 +62,7 @@ public class NaveEspacial implements IListas {
         this.transporte = transporte;
     }
     
-    public boolean temTransporte( Transporte transporte ){
-        if(transporte != null){
-            return false;
-        } else {
-            return true;
-        }
-    }
+
     
     
          // Sobrescreve o método equals para verificar se dois portos são iguais

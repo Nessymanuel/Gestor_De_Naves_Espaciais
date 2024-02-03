@@ -19,7 +19,7 @@ public class PortoEspacial implements IListas {
 
     // Construtor padrão que inicializa valores padrão
     public PortoEspacial() {
-        this.id = 1;
+        this.id = 0;
         this.nome = "Terra";
         this.x = 0;
         this.y = 0;
